@@ -21,21 +21,17 @@ class Solution {
         int[] vis = new int[V];
         
         for(int i = 0; i < V; i++){
-            if(vis[i] == 0){
-                Queue<pair> q = new LinkedList<>();
-                q.add(new pair(i, 1));
-                vis[i] = 1;
-                while(!q.isEmpty()){
-                    pair curr = q.remove();
-                    for(int x : al.get(curr.f)){
-                        if(vis[x] == 0){
-                            q.add(new pair(x, -curr.s));
-                            vis[x] = -curr.s;
-                        }
-                        else if(vis[x] == curr.s)return false;
-                    }
-                }
-            }
+            if(vis[i] == 0)if(!helper(al, vis, i, 1))return false;
+                
+        }
+        return true;
+    }
+    boolean helper(ArrayList<ArrayList<Integer>> al, int[] vis, int i, int c){
+        if(vis[i] == -c)return false;
+        if(vis[i] == c)return true;
+        vis[i] = c;
+        for(int x : al.get(i)){
+            if(!helper(al, vis, x, -c))return false;
         }
         return true;
     }
