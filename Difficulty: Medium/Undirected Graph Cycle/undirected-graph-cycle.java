@@ -19,27 +19,19 @@ class Solution {
             al.get(arr[i][1]).add(arr[i][0]);
         }
         boolean[] vis = new boolean[V];
-        for(int j = 0; j < V; j++){
-            if(!vis[j]){
-                Queue<Pair> q = new LinkedList<>();
-                vis[j] = true;
-                q.add(new Pair(j, -1));
-                while(!q.isEmpty()){
-                    Pair curr = q.remove();
-                    
-                    for(int i = 0; i < al.get(curr.f).size(); i++){
-                        int x = al.get(curr.f).get(i);
-                        
-                        if(!vis[x]){
-                            q.add(new Pair(x, curr.f));
-                            vis[x] = true;
-                        }
-                        else if(x != curr.s && vis[x])return true;
-                    }
-                }
-            }
+        for(int i = 0; i < V; i++){
+            if(!vis[i] && helper(al, vis, i, -1))return true;
         }
                 
+        return false;
+    }
+    
+    boolean helper(ArrayList<ArrayList<Integer>> al, boolean[] vis, int i, int p){
+        if(vis[i])return true;
+        vis[i] = true;
+        for(int x : al.get(i)){
+            if(x != p && helper(al, vis, x, i))return true;
+        }
         return false;
     }
 }
