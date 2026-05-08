@@ -7,28 +7,34 @@ class Solution {
         }
         for(int i = 0; i < arr.length; i++){
             al.get(arr[i][0]).add(arr[i][1]);
-            al.get(arr[i][0]).add(arr[i][1]);
         }
         boolean vis[] = new boolean[V];
-        boolean pv[] = new boolean[V];
+        int[] in = new int[V];
         
-        for(int i = 0; i < V; i++){
-            if(!vis[i])if(helper(al, vis, pv, i))return true;
-            
+        for(int i = 0; i < arr.length; i++){
+            in[arr[i][1]]++;
         }
-        return false;
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0; i < V; i++){
+            if(in[i] == 0)q.add(i);
+        }
+        int cnt = 0;
+        while(!q.isEmpty()){
+            int n = q.size();
+            for(int i = 0; i < n; i++){
+                int x = q.remove();
+                vis[x] = true;
+                cnt++;
+                for(int k : al.get(x)){
+                    if(!vis[k]){
+                        in[k]--;
+                        if(in[k] == 0)q.add(k);
+                    }
+                }
+            }
+        }
+        return cnt != V;
     }
     
-    boolean helper(ArrayList<ArrayList<Integer>> al, boolean vis[], boolean pv[], int i){
-        
-        vis[i] = true;
-        pv[i] = true;
-        for(int x : al.get(i)){
-            if(!vis[x] && helper(al, vis, pv, x))return true;
-            if(vis[x] && pv[x])return true;
-            
-        }
-        pv[i] = false;
-        return false;
-    }
+    
 }
